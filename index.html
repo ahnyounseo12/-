@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="1주차 C++ 턴제 RPG를 웹브라우저에서 즐길 수 있도록 구현한 과제 프로젝트"
+    />
+    <meta name="theme-color" content="#0b1020" />
+    <title>RPG 턴제 전투 | 23101307 안윤서</title>
+    <link rel="stylesheet" href="./styles.css" />
+    <script src="./game.js" defer></script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">본문으로 바로가기</a>
+
+    <div class="ambient ambient-one" aria-hidden="true"></div>
+    <div class="ambient ambient-two" aria-hidden="true"></div>
+
+    <header class="site-header">
+      <a class="brand" href="#" data-go-home aria-label="RPG 턴제 전투 처음 화면">
+        <span class="brand-mark" aria-hidden="true">R</span>
+        <span>
+          <strong>TURNBOUND</strong>
+          <small>RPG 턴제 전투</small>
+        </span>
+      </a>
+      <div class="header-actions">
+        <span class="student-chip">23101307 · 안윤서</span>
+        <button class="text-button" type="button" data-open-guide>
+          <span aria-hidden="true">?</span> 게임 방법
+        </button>
+      </div>
+    </header>
+
+    <main id="main-content" class="app-shell">
+      <section id="screen-home" class="screen home-screen" aria-labelledby="home-title">
+        <div class="eyebrow"><span></span> C++ PROJECT · WEB REMAKE</div>
+        <div class="hero-layout">
+          <div class="hero-copy">
+            <p class="kicker">세 번의 전투, 단 한 번의 모험</p>
+            <h1 id="home-title"><span class="hero-title-line">마지막 드래곤까지</span><br /><em>턴을 지배하라.</em></h1>
+            <p class="hero-description">
+              전사 또는 마법사가 되어 슬라임, 고블린, 드래곤을 차례로 처치하세요.
+              판단 하나가 다음 턴의 생존을 결정합니다.
+            </p>
+            <div class="hero-actions">
+              <button id="start-button" class="primary-button" type="button">
+                모험 시작 <span aria-hidden="true">→</span>
+              </button>
+              <button class="secondary-button" type="button" data-open-guide>규칙 살펴보기</button>
+            </div>
+            <div class="feature-list" aria-label="게임 특징">
+              <span><b>2</b> 개의 직업</span>
+              <span><b>3</b> 단계 전투</span>
+              <span><b>4</b> 가지 행동</span>
+            </div>
+          </div>
+
+          <div class="hero-art" aria-hidden="true">
+            <div class="rune-ring rune-ring-outer"></div>
+            <div class="rune-ring rune-ring-inner"></div>
+            <div class="dragon-sigil">
+              <span>DRG</span>
+              <small>FINAL ENCOUNTER</small>
+            </div>
+            <div class="stage-tag tag-one">01 · SLM</div>
+            <div class="stage-tag tag-two">02 · GOB</div>
+            <div class="stage-tag tag-three">03 · DRG</div>
+          </div>
+        </div>
+        <div class="scroll-hint" aria-hidden="true">CHOOSE · ACT · SURVIVE</div>
+      </section>
+
+      <section id="screen-select" class="screen select-screen" aria-labelledby="select-title" hidden>
+        <div class="section-heading">
+          <div>
+            <div class="eyebrow"><span></span> SELECT YOUR PATH</div>
+            <h1 id="select-title">당신의 직업을 선택하세요</h1>
+            <p>능력치와 스킬이 다른 두 영웅 중 한 명과 모험을 시작합니다.</p>
+          </div>
+          <button class="back-button" type="button" data-go-home>← 처음으로</button>
+        </div>
+
+        <fieldset class="class-picker">
+          <legend class="sr-only">플레이할 직업</legend>
+
+          <label class="class-card warrior-card">
+            <input type="radio" name="character" value="warrior" checked />
+            <span class="selected-label">선택됨</span>
+            <span class="class-number">01</span>
+            <span class="class-emblem" aria-hidden="true">W</span>
+            <span class="class-name">
+              <small>WARRIOR</small>
+              <strong>전사</strong>
+            </span>
+            <span class="class-summary">높은 체력과 묵직한 강타로 전선을 버팁니다.</span>
+            <span class="stat-grid">
+              <span><small>HP</small><b>160</b></span>
+              <span><small>MP</small><b>30</b></span>
+              <span><small>일반 공격</small><b>24</b></span>
+              <span><small>강타</small><b>48 <i>· MP 10</i></b></span>
+            </span>
+          </label>
+
+          <label class="class-card mage-card">
+            <input type="radio" name="character" value="mage" />
+            <span class="selected-label">선택됨</span>
+            <span class="class-number">02</span>
+            <span class="class-emblem" aria-hidden="true">M</span>
+            <span class="class-name">
+              <small>MAGE</small>
+              <strong>마법사</strong>
+            </span>
+            <span class="class-summary">풍부한 마력과 강력한 화염구로 빠르게 압도합니다.</span>
+            <span class="stat-grid">
+              <span><small>HP</small><b>110</b></span>
+              <span><small>MP</small><b>60</b></span>
+              <span><small>일반 공격</small><b>16</b></span>
+              <span><small>화염구</small><b>56 <i>· MP 12</i></b></span>
+            </span>
+          </label>
+        </fieldset>
+
+        <div class="selection-footer">
+          <p><span aria-hidden="true">◆</span> 직업은 게임을 다시 시작할 때 변경할 수 있습니다.</p>
+          <button id="confirm-character" class="primary-button" type="button">
+            이 직업으로 시작 <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </section>
+
+      <section id="screen-battle" class="screen battle-screen" aria-labelledby="battle-title" hidden>
+        <div class="battle-topline">
+          <div>
+            <div class="eyebrow"><span></span> ADVENTURE IN PROGRESS</div>
+            <h1 id="battle-title"><span id="stage-number">1</span>단계 · <span id="battle-monster-name">슬라임</span></h1>
+          </div>
+          <div class="turn-indicator"><small>CURRENT TURN</small><strong id="turn-number">01</strong></div>
+        </div>
+
+        <ol class="stage-progress" aria-label="모험 진행 단계">
+          <li class="is-current" data-stage-step="0"><span>1</span><div><small>STAGE 01</small><b>슬라임</b></div></li>
+          <li data-stage-step="1"><span>2</span><div><small>STAGE 02</small><b>고블린</b></div></li>
+          <li data-stage-step="2"><span>3</span><div><small>STAGE 03</small><b>드래곤</b></div></li>
+        </ol>
+
+        <div class="combatants">
+          <article id="monster-card" class="combat-card monster-card">
+            <div class="card-label"><span>ENEMY</span><b id="monster-attack-label">ATK 9</b></div>
+            <div class="combat-identity">
+              <div id="monster-sigil" class="combat-sigil enemy-sigil" aria-hidden="true">SLM</div>
+              <div><small id="monster-subtitle">THE FIRST TRIAL</small><h2 id="monster-name">슬라임</h2></div>
+            </div>
+            <div class="meter-block">
+              <div class="meter-label"><span>체력</span><strong><b id="monster-hp">60</b> / <span id="monster-max-hp">60</span></strong></div>
+              <div class="meter-track enemy-track" role="progressbar" aria-label="몬스터 체력" aria-valuemin="0" aria-valuemax="60" aria-valuenow="60">
+                <span id="monster-hp-bar"></span>
+              </div>
+            </div>
+          </article>
+
+          <div class="versus" aria-hidden="true"><span>VS</span></div>
+
+          <article id="player-card" class="combat-card player-card">
+            <div class="card-label"><span>PLAYER</span><b id="defense-badge">READY</b></div>
+            <div class="combat-identity">
+              <div id="player-sigil" class="combat-sigil player-sigil" aria-hidden="true">W</div>
+              <div><small id="player-subtitle">WARRIOR</small><h2 id="player-name">전사</h2></div>
+            </div>
+            <div class="dual-meters">
+              <div class="meter-block">
+                <div class="meter-label"><span>HP</span><strong><b id="player-hp">160</b> / <span id="player-max-hp">160</span></strong></div>
+                <div class="meter-track hp-track" role="progressbar" aria-label="플레이어 체력" aria-valuemin="0" aria-valuemax="160" aria-valuenow="160"><span id="player-hp-bar"></span></div>
+              </div>
+              <div class="meter-block">
+                <div class="meter-label"><span>MP</span><strong><b id="player-mp">30</b> / <span id="player-max-mp">30</span></strong></div>
+                <div class="meter-track mp-track" role="progressbar" aria-label="플레이어 마력" aria-valuemin="0" aria-valuemax="30" aria-valuenow="30"><span id="player-mp-bar"></span></div>
+              </div>
+            </div>
+            <div class="potion-count"><span aria-hidden="true">✦</span> 회복 포션 <strong id="potion-count">3</strong>개</div>
+          </article>
+        </div>
+
+        <div class="battle-workspace">
+          <section class="action-panel" aria-labelledby="action-title">
+            <div class="panel-heading"><div><small>YOUR MOVE</small><h2 id="action-title">행동 선택</h2></div><span>키보드 1–4</span></div>
+            <div class="action-grid">
+              <button class="action-button" type="button" data-action="attack">
+                <span class="action-key">1</span><span class="action-icon" aria-hidden="true">↗</span>
+                <span class="action-copy"><strong>일반 공격</strong><small>MP 소모 없이 <b id="attack-damage">24</b> 피해</small></span>
+              </button>
+              <button class="action-button skill-action" type="button" data-action="skill">
+                <span class="action-key">2</span><span class="action-icon" aria-hidden="true">✦</span>
+                <span class="action-copy"><strong id="skill-name">강타</strong><small><b id="skill-damage">48</b> 피해 · MP <b id="skill-cost">10</b></small></span>
+              </button>
+              <button class="action-button" type="button" data-action="defend">
+                <span class="action-key">3</span><span class="action-icon" aria-hidden="true">◇</span>
+                <span class="action-copy"><strong>방어</strong><small>이번 반격 피해 50% 감소</small></span>
+              </button>
+              <button class="action-button potion-action" type="button" data-action="potion">
+                <span class="action-key">4</span><span class="action-icon" aria-hidden="true">+</span>
+                <span class="action-copy"><strong>포션 사용</strong><small>HP 최대 50 회복 · <b id="action-potions">3</b>개</small></span>
+              </button>
+            </div>
+            <p id="action-feedback" class="action-feedback">행동을 선택하면 전투 결과가 여기에 표시됩니다.</p>
+          </section>
+
+          <section class="log-panel" aria-labelledby="log-title">
+            <div class="panel-heading"><div><small>BATTLE RECORD</small><h2 id="log-title">전투 기록</h2></div><span class="live-dot">LIVE</span></div>
+            <ol id="battle-log" class="battle-log" aria-live="polite" aria-relevant="additions"></ol>
+          </section>
+        </div>
+      </section>
+
+      <section id="screen-result" class="screen result-screen" aria-labelledby="result-title" hidden>
+        <div id="result-emblem" class="result-emblem" aria-hidden="true">V</div>
+        <div class="eyebrow centered"><span></span><b id="result-kicker">ADVENTURE COMPLETE</b><span></span></div>
+        <h1 id="result-title">모든 몬스터를 처치했습니다!</h1>
+        <p id="result-description">세 번의 전투를 통과하고 왕국의 평화를 되찾았습니다.</p>
+
+        <div class="result-summary" aria-label="최종 전투 결과">
+          <div><small>최종 직업</small><strong id="result-class">전사</strong></div>
+          <div><small>남은 HP</small><strong><span id="result-hp">49</span> / <span id="result-max-hp">160</span></strong></div>
+          <div><small>남은 포션</small><strong><span id="result-potions">3</span>개</strong></div>
+          <div><small>도달 단계</small><strong id="result-stage">3 / 3</strong></div>
+        </div>
+
+        <div class="result-actions">
+          <button id="restart-same" class="primary-button" type="button">같은 직업으로 다시</button>
+          <button id="change-class" class="secondary-button" type="button">직업 바꾸기</button>
+          <button class="text-button" type="button" data-go-home>처음 화면으로</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>23101307 · 안윤서</span>
+      <span>1주차 C++ 프로젝트 기반 웹 리메이크</span>
+    </footer>
+
+    <dialog id="guide-dialog" class="guide-dialog" aria-labelledby="guide-title">
+      <div class="dialog-header">
+        <div><small>HOW TO PLAY</small><h2 id="guide-title">게임 방법</h2></div>
+        <button class="dialog-close" type="button" data-close-guide aria-label="게임 방법 닫기">×</button>
+      </div>
+      <div class="guide-body">
+        <ol class="guide-stages">
+          <li><span>1</span><div><b>슬라임</b><small>HP 60 · 공격 9</small></div></li>
+          <li><span>2</span><div><b>고블린</b><small>HP 100 · 공격 15</small></div></li>
+          <li><span>3</span><div><b>드래곤</b><small>HP 180 · 공격 24</small></div></li>
+        </ol>
+        <div class="rule-list">
+          <p><b>공격과 반격</b><span>성공한 행동 뒤 살아 있는 몬스터가 반격합니다. 처치한 몬스터는 반격하지 않습니다.</span></p>
+          <p><b>방어</b><span>바로 다음 몬스터 공격의 피해를 절반으로 줄입니다.</span></p>
+          <p><b>포션</b><span>처음에 3개를 보유하며, 하나당 HP를 최대 50 회복합니다.</span></p>
+          <p><b>턴 유지</b><span>MP·포션 부족이나 최대 HP에서의 포션 사용은 턴을 소비하지 않습니다.</span></p>
+          <p><b>단계 보상</b><span>1·2단계 승리 후 HP 30, MP 15를 최대치 안에서 회복합니다.</span></p>
+        </div>
+      </div>
+      <button class="primary-button dialog-confirm" type="button" data-close-guide>확인했습니다</button>
+    </dialog>
+
+    <dialog id="stage-modal" class="stage-modal" aria-labelledby="stage-modal-title">
+      <div class="stage-modal-card">
+        <span class="clear-mark" aria-hidden="true">✓</span>
+        <small>STAGE CLEAR</small>
+        <h2 id="stage-modal-title">슬라임 처치!</h2>
+        <p>다음 전투를 준비하며 능력치를 회복했습니다.</p>
+        <div class="reward-row">
+          <span>HP 회복 <b id="reward-hp">+0</b></span>
+          <span>MP 회복 <b id="reward-mp">+0</b></span>
+          <span>포션 <b>유지</b></span>
+        </div>
+        <button id="next-stage" class="primary-button" type="button">다음 전투 <span aria-hidden="true">→</span></button>
+      </div>
+    </dialog>
+
+    <noscript>이 게임을 실행하려면 브라우저에서 JavaScript를 활성화해주세요.</noscript>
+  </body>
+</html>
+
